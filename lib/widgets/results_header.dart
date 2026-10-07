@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'sort_dropdown.dart';
 
 class ResultsHeader extends StatelessWidget {
-  const ResultsHeader({super.key});
+  int viewedCount;
+  final int total;
+  ResultsHeader({super.key, required this.total, required this.viewedCount});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class ResultsHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             style: TextStyle(fontSize: 12, color: Colors.grey),
             children: [
               TextSpan(text: 'Showing '),
@@ -22,7 +24,7 @@ class ResultsHeader extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              TextSpan(text: ' of 194 products'),
+              TextSpan(text: ' of $total products'),
             ],
           ),
         ),

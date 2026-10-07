@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesBar extends StatefulWidget {
-  const CategoriesBar({super.key});
-
+  final Function(String) onCategorySelected;
+  const CategoriesBar({super.key, required this.onCategorySelected});
   @override
   State<CategoriesBar> createState() => _CategoriesBarState();
 }
@@ -51,6 +51,7 @@ class _CategoriesBarState extends State<CategoriesBar> {
               setState(() {
                 selectedIndex = index;
               });
+              widget.onCategorySelected(categories[index].toString());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
