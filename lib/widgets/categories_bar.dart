@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesBar extends StatefulWidget {
@@ -8,13 +9,30 @@ class CategoriesBar extends StatefulWidget {
 }
 
 class _CategoriesBarState extends State<CategoriesBar> {
-  final List<String> categories = const [
-    'All',
-    'Smartphones',
-    'Laptops',
-    'Fragrances',
-    'Skincare',
-  ];
+  final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: "https://dummyjson.com/",
+      headers: {'Content-Type': 'application/json'},
+    ),
+  );
+
+  Future getCatergoryList() async {
+    final reponse = await dio.get("products/category-list");
+    setState(() {
+      categories = ["All", ...reponse.data];
+    });
+  }
+
+  List categories = [];
+  void assignCategory() {
+    getCatergoryList();
+  }
+
+  @override
+  initState() {
+    super.initState();
+    assignCategory();
+  }
 
   int selectedIndex = 0;
 
@@ -45,7 +63,7 @@ class _CategoriesBarState extends State<CategoriesBar> {
               ),
               alignment: Alignment.center,
               child: Text(
-                categories[index],
+                categories[index].toString(),
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.grey.shade700,
                   fontSize: 13,
