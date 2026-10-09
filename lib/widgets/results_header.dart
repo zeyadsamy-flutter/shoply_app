@@ -14,6 +14,7 @@ class ResultsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int count = viewedCount > total ? total : viewedCount;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -23,7 +24,7 @@ class ResultsHeader extends StatelessWidget {
             children: [
               const TextSpan(text: 'Showing '),
               TextSpan(
-                text: '$viewedCount',
+                text: '$count',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,

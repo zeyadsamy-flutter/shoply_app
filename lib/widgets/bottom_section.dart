@@ -26,7 +26,9 @@ class BottomSection extends StatelessWidget {
           onLoadMore: onLoadMore,
         ),
         SizedBox(height: viewedCount >= totalCount ? 0 : 16),
-        const ProductsProgressBar(progress: 0.15),
+        ProductsProgressBar(
+          progress: viewedCount / totalCount,
+        ),
         const SizedBox(height: 8),
       ],
     );

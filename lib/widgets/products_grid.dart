@@ -5,11 +5,13 @@ import 'product_card.dart';
 
 class ProductsGrid extends StatefulWidget {
   final String selectedCategory;
-  final Function(int) onProductsCountLoaded;
+  final Function(int) productsCount;
+  final int viewedCount;
   const ProductsGrid({
     super.key,
     required this.selectedCategory,
-    required this.onProductsCountLoaded,
+    required this.productsCount,
+    required this.viewedCount,
   });
   @override
   State<ProductsGrid> createState() => _ProductsGridState();
@@ -35,7 +37,7 @@ class _ProductsGridState extends State<ProductsGrid> {
 
     setState(() {
       products = response.data['products'];
-      widget.onProductsCountLoaded(response.data['total']);
+      widget.productsCount(response.data['total']);
     });
   }
 
@@ -62,7 +64,9 @@ class _ProductsGridState extends State<ProductsGrid> {
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
-      itemCount: products.length,
+      itemCount: products.length < widget.viewedCount
+          ? products.length
+          : widget.viewedCount,
       itemBuilder: (context, index) {
         return ProductCard(
           title: products[index]['title'],

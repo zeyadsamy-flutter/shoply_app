@@ -47,7 +47,8 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: ProductsGrid(
                   selectedCategory: selectedCategory,
-                  onProductsCountLoaded: (value) {
+                  viewedCount: viewedCount,
+                  productsCount: (value) {
                     setState(() {
                       productsCount = value;
                     });
