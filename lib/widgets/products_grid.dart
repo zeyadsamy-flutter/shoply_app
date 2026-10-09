@@ -5,9 +5,12 @@ import 'product_card.dart';
 
 class ProductsGrid extends StatefulWidget {
   final String selectedCategory;
-
-  const ProductsGrid({super.key, required this.selectedCategory});
-
+  final Function(int) onProductsCountLoaded;
+  const ProductsGrid({
+    super.key,
+    required this.selectedCategory,
+    required this.onProductsCountLoaded,
+  });
   @override
   State<ProductsGrid> createState() => _ProductsGridState();
 }
@@ -24,11 +27,15 @@ class _ProductsGridState extends State<ProductsGrid> {
 
   Future<void> fetchProducts() async {
     final response = widget.selectedCategory == 'All'
-        ? await dio.get('products')
-        : await dio.get("products/category/${widget.selectedCategory}");
+        ? await dio.get('products', queryParameters: {"limit": 0})
+        : await dio.get(
+            "products/category/${widget.selectedCategory}",
+            queryParameters: {"limit": 0},
+          );
 
     setState(() {
       products = response.data['products'];
+      widget.onProductsCountLoaded(response.data['total']);
     });
   }
 
