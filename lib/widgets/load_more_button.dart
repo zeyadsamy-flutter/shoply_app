@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 
 class LoadMoreButton extends StatelessWidget {
-  final VoidCallback? onPressed;
+  final int viewedCount;
+  final int totalCount;
+  final VoidCallback onLoadMore;
 
-  const LoadMoreButton({super.key, this.onPressed});
+  const LoadMoreButton({
+    super.key,
+    required this.viewedCount,
+    required this.totalCount,
+    required this.onLoadMore,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (viewedCount >= totalCount) {
+      return const SizedBox(height: 0);
+    }
     return SizedBox(
       width: double.infinity,
       height: 48,
       child: OutlinedButton(
-        onPressed: onPressed ?? () {},
+        onPressed: onLoadMore,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: Colors.grey.shade200),
           shape: RoundedRectangleBorder(

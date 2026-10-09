@@ -17,6 +17,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   String selectedCategory = 'All';
   int productsCount = 194;
+  int viewedCount = 8;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,11 +37,12 @@ class _HomeViewState extends State<HomeView> {
                 onCategorySelected: (category) {
                   setState(() {
                     selectedCategory = category;
+                    viewedCount = 8;
                   });
                 },
               ),
               const SizedBox(height: 16),
-              ResultsHeader(total: productsCount, viewedCount: 8),
+              ResultsHeader(total: productsCount, viewedCount: viewedCount),
               const SizedBox(height: 12),
               Expanded(
                 child: ProductsGrid(
@@ -52,7 +55,15 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               const SizedBox(height: 12),
-              BottomSection(),
+              BottomSection(
+                viewedCount: viewedCount,
+                totalCount: productsCount,
+                onLoadMore: () {
+                  setState(() {
+                    viewedCount += 8;
+                  });
+                },
+              ),
             ],
           ),
         ),
