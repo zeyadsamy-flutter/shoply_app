@@ -18,7 +18,7 @@ class _HomeViewState extends State<HomeView> {
   String selectedCategory = 'All';
   int productsCount = 194;
   int viewedCount = 8;
-
+  String selectedOption = 'Recommended';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +42,21 @@ class _HomeViewState extends State<HomeView> {
                 },
               ),
               const SizedBox(height: 16),
-              ResultsHeader(total: productsCount, viewedCount: viewedCount),
+              ResultsHeader(
+                total: productsCount,
+                viewedCount: viewedCount,
+                selectedOption: selectedOption,
+                onSelected: (value) {
+                  setState(() {
+                    selectedOption = value;
+                    viewedCount = 8;
+                  });
+                },
+              ),
               const SizedBox(height: 12),
               Expanded(
                 child: ProductsGrid(
+                  selectedOption: selectedOption,
                   selectedCategory: selectedCategory,
                   viewedCount: viewedCount,
                   productsCount: (value) {

@@ -5,11 +5,14 @@ import 'sort_dropdown.dart';
 class ResultsHeader extends StatelessWidget {
   final int viewedCount;
   final int total;
-
+  final ValueChanged<String> onSelected;
+  final String selectedOption;
   const ResultsHeader({
     super.key,
     required this.total,
     required this.viewedCount,
+    required this.selectedOption,
+    required this.onSelected,
   });
 
   @override
@@ -34,7 +37,7 @@ class ResultsHeader extends StatelessWidget {
             ],
           ),
         ),
-        const SortDropdown(),
+        SortDropdown(selectedOption: selectedOption, onSelected: onSelected),
       ],
     );
   }

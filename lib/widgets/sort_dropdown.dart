@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
-class SortDropdown extends StatefulWidget {
-  const SortDropdown({super.key});
-
-  @override
-  State<SortDropdown> createState() => _SortDropdownState();
-}
-
-class _SortDropdownState extends State<SortDropdown> {
+class SortDropdown extends StatelessWidget {
+  const SortDropdown({
+    super.key,
+    required this.selectedOption,
+    required this.onSelected,
+  });
+  final String selectedOption;
+  final ValueChanged<String> onSelected;
   final List<String> sortOptions = const [
     'Recommended',
     'Price: Low to High',
     'Price: High to Low',
     'Title: A-Z',
   ];
-
-  String selectedOption = 'Recommended';
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +33,7 @@ class _SortDropdownState extends State<SortDropdown> {
         color: Colors.white,
         padding: EdgeInsets.zero,
         onSelected: (String value) {
-          setState(() {
-            selectedOption = value;
-          });
+          onSelected(value);
         },
         itemBuilder: (BuildContext context) {
           return sortOptions.map((String option) {
@@ -50,7 +46,9 @@ class _SortDropdownState extends State<SortDropdown> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF1E66D5) : Colors.transparent,
+                  color: isSelected
+                      ? const Color(0xFF1E66D5)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(2),
                 ),
                 child: Text(
@@ -58,7 +56,9 @@ class _SortDropdownState extends State<SortDropdown> {
                   style: TextStyle(
                     fontSize: 13,
                     color: isSelected ? Colors.white : Colors.black87,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ),
@@ -75,11 +75,7 @@ class _SortDropdownState extends State<SortDropdown> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.swap_vert,
-                size: 16,
-                color: Color(0xFF00B074),
-              ),
+              const Icon(Icons.swap_vert, size: 16, color: Color(0xFF00B074)),
               const SizedBox(width: 4),
               Text(
                 selectedOption,
