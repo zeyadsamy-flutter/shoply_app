@@ -82,10 +82,16 @@ class _HomeViewState extends State<HomeView> {
                 const SizedBox(height: 12),
                 Expanded(
                   child: ProductsGrid(
+                    productsTotal: productsCount,
                     search: search,
                     selectedOption: selectedOption,
                     selectedCategory: selectedCategory,
                     viewedCount: viewedCount,
+                    onLoadMore: () {
+                      setState(() {
+                        viewedCount += 8;
+                      });
+                    },
                     productsCount: (value) {
                       setState(() {
                         productsCount = value;
@@ -93,16 +99,16 @@ class _HomeViewState extends State<HomeView> {
                     },
                   ),
                 ),
-                const SizedBox(height: 12),
-                BottomSection(
-                  viewedCount: viewedCount,
-                  totalCount: productsCount,
-                  onLoadMore: () {
-                    setState(() {
-                      viewedCount += 8;
-                    });
-                  },
-                ),
+                // const SizedBox(height: 12),
+                // BottomSection(
+                //   viewedCount: viewedCount,
+                //   totalCount: productsCount,
+                //   onLoadMore: () {
+                //     setState(() {
+                //       viewedCount += 8;
+                //     });
+                //   },
+                // ),
               ],
             ),
           ),

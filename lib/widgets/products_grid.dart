@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shoply/widgets/bottom_section.dart';
 
 import 'product_card.dart';
 
 class ProductsGrid extends StatefulWidget {
   final String selectedCategory;
   final Function(int) productsCount;
+  final int productsTotal;
   final int viewedCount;
   final String selectedOption;
+  final VoidCallback onLoadMore;
   final String search;
   const ProductsGrid({
     super.key,
@@ -16,6 +19,8 @@ class ProductsGrid extends StatefulWidget {
     required this.viewedCount,
     required this.selectedOption,
     required this.search,
+    required this.productsTotal,
+    required this.onLoadMore,
   });
   @override
   State<ProductsGrid> createState() => _ProductsGridState();
@@ -86,24 +91,39 @@ class _ProductsGridState extends State<ProductsGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.68,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: products.length < widget.viewedCount
-          ? products.length
-          : widget.viewedCount,
-      itemBuilder: (context, index) {
-        return ProductCard(
-          title: products[index]['title'],
-          price: '\$${products[index]['price']}',
-          rating: products[index]['rating'].toString(),
-          imageUrl: (products[index]['thumbnail']),
-        );
-      },
+    final currentCount = products.length < widget.viewedCount
+        ? products.length
+        : widget.viewedCount;
+
+    return CustomScrollView(
+      slivers: [
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.68,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return ProductCard(
+              title: products[index]['title'],
+              price: '\$${products[index]['price']}',
+              rating: products[index]['rating'].toString(),
+              imageUrl: (products[index]['thumbnail']),
+            );
+          }, childCount: currentCount),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: BottomSection(
+              viewedCount: widget.viewedCount,
+              totalCount: widget.productsTotal,
+              onLoadMore: widget.onLoadMore,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
