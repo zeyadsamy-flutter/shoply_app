@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SearchField extends StatelessWidget {
-  const SearchField({super.key});
-
+  const SearchField({super.key, required this.search});
+  final ValueChanged<String> search;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,7 +11,10 @@ class SearchField extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: Colors.grey.shade200),
       ),
-      child: const TextField(
+      child: TextField(
+        onChanged: (value) {
+          search(value);
+        },
         decoration: InputDecoration(
           hintText: 'Search products...',
           hintStyle: TextStyle(color: Colors.grey, fontSize: 14),

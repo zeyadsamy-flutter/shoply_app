@@ -8,12 +8,14 @@ class ProductsGrid extends StatefulWidget {
   final Function(int) productsCount;
   final int viewedCount;
   final String selectedOption;
+  final String search;
   const ProductsGrid({
     super.key,
     required this.selectedCategory,
     required this.productsCount,
     required this.viewedCount,
     required this.selectedOption,
+    required this.search,
   });
   @override
   State<ProductsGrid> createState() => _ProductsGridState();
@@ -44,12 +46,21 @@ class _ProductsGridState extends State<ProductsGrid> {
   }
 
   Future<void> fetchProducts() async {
-    final response = widget.selectedCategory == 'All'
-        ? await dio.get('products', queryParameters: _getSortParams())
-        : await dio.get(
-            "products/category/${widget.selectedCategory}",
-            queryParameters: _getSortParams(),
-          );
+    final Response response;
+
+    if (widget.search.isNotEmpty) {
+      response = await dio.get(
+        'products/search',
+        queryParameters: {..._getSortParams(), 'q': widget.search},
+      );
+    } else if (widget.selectedCategory != 'All') {
+      response = await dio.get(
+        "products/category/${widget.selectedCategory}",
+        queryParameters: _getSortParams(),
+      );
+    } else {
+      response = await dio.get('products', queryParameters: _getSortParams());
+    }
 
     setState(() {
       products = response.data['products'];
@@ -67,7 +78,8 @@ class _ProductsGridState extends State<ProductsGrid> {
   void didUpdateWidget(covariant ProductsGrid oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedCategory != widget.selectedCategory ||
-        oldWidget.selectedOption != widget.selectedOption) {
+        oldWidget.selectedOption != widget.selectedOption ||
+        oldWidget.search != widget.search) {
       fetchProducts();
     }
   }
