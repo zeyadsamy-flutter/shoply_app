@@ -37,18 +37,30 @@ class _ProductsGridState extends State<ProductsGrid> {
   List products = [];
 
   Map<String, dynamic> _getSortParams() {
-    switch (widget.selectedOption) {
-      case 'Price: Low to High':
-        return {"limit": 0, "sortBy": "price", "order": "asc"};
-      case 'Price: High to Low':
-        return {"limit": 0, "sortBy": "price", "order": "desc"};
-      case 'Title: A-Z':
-        return {"limit": 0, "sortBy": "title", "order": "asc"};
-      case 'Recommended':
-      default:
-        return {"limit": 0, "sortBy": "rating", "order": "desc"};
-    }
+  final Map<String, String> sortOption;
+
+  switch (widget.selectedOption) {
+    case 'Price: Low to High':
+      sortOption = {"sortBy": "price", "order": "asc"};
+      break;
+    case 'Price: High to Low':
+      sortOption = {"sortBy": "price", "order": "desc"};
+      break;
+    case 'Title: A-Z':
+      sortOption = {"sortBy": "title", "order": "asc"};
+      break;
+    case 'Recommended':
+    default:
+      sortOption = {"sortBy": "rating", "order": "desc"};
+      break;
   }
+
+  return {
+    "limit": 0,
+    "select": "id,title,price,thumbnail,rating",
+    ...sortOption,
+  };
+}
 
   Future<void> fetchProducts() async {
     final Response response;
