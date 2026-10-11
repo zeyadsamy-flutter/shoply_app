@@ -82,7 +82,7 @@ class _ProductsGridState extends State<ProductsGrid> {
 
     setState(() {
       products = (response.data['products'] as List)
-          .map((item) => ProductModel(item))
+          .map((item) => ProductModel.fromJson(item))
           .toList();
       widget.productsCount(response.data['total']);
     });

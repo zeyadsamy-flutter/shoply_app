@@ -5,7 +5,15 @@ class ProductModel {
   final String thumbnail;
   final String title;
 
-  ProductModel(Map<String, dynamic> data)
+  const ProductModel({
+    required this.id,
+    required this.price,
+    required this.rating,
+    required this.thumbnail,
+    required this.title,
+  });
+
+  ProductModel.fromJson(Map<String, dynamic> data)
     : id = data["id"],
       price = data["price"],
       rating = data["rating"],
