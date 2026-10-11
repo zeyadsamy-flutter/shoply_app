@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/custom_app_bar.dart';
-import '../widgets/search_field.dart';
-import '../widgets/categories_bar.dart';
-import '../widgets/results_header.dart';
-import '../widgets/products_grid.dart';
-import '../widgets/bottom_section.dart';
+import '../../widgets/custom_app_bar.dart';
+import '../../widgets/search_field.dart';
+import '../../widgets/categories_bar.dart';
+import '../../widgets/results_header.dart';
+import '../../widgets/products_grid.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

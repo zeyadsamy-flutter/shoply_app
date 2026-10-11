@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/views/home_view.dart';
+import 'package:shoply/features/views/home_view.dart';
 
 void main() {
   runApp(const MyApp());

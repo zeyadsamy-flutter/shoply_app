@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shoply/features/data/product_model.dart';
 import 'package:shoply/widgets/bottom_section.dart';
 
 import 'product_card.dart';
@@ -34,33 +35,33 @@ class _ProductsGridState extends State<ProductsGrid> {
     ),
   );
 
-  List products = [];
+  List<ProductModel> products = [];
 
   Map<String, dynamic> _getSortParams() {
-  final Map<String, String> sortOption;
+    final Map<String, String> sortOption;
 
-  switch (widget.selectedOption) {
-    case 'Price: Low to High':
-      sortOption = {"sortBy": "price", "order": "asc"};
-      break;
-    case 'Price: High to Low':
-      sortOption = {"sortBy": "price", "order": "desc"};
-      break;
-    case 'Title: A-Z':
-      sortOption = {"sortBy": "title", "order": "asc"};
-      break;
-    case 'Recommended':
-    default:
-      sortOption = {"sortBy": "rating", "order": "desc"};
-      break;
+    switch (widget.selectedOption) {
+      case 'Price: Low to High':
+        sortOption = {"sortBy": "price", "order": "asc"};
+        break;
+      case 'Price: High to Low':
+        sortOption = {"sortBy": "price", "order": "desc"};
+        break;
+      case 'Title: A-Z':
+        sortOption = {"sortBy": "title", "order": "asc"};
+        break;
+      case 'Recommended':
+      default:
+        sortOption = {"sortBy": "rating", "order": "desc"};
+        break;
+    }
+
+    return {
+      "limit": 0,
+      "select": "id,title,price,thumbnail,rating",
+      ...sortOption,
+    };
   }
-
-  return {
-    "limit": 0,
-    "select": "id,title,price,thumbnail,rating",
-    ...sortOption,
-  };
-}
 
   Future<void> fetchProducts() async {
     final Response response;
@@ -80,7 +81,9 @@ class _ProductsGridState extends State<ProductsGrid> {
     }
 
     setState(() {
-      products = response.data['products'];
+      products = (response.data['products'] as List)
+          .map((item) => ProductModel(item))
+          .toList();
       widget.productsCount(response.data['total']);
     });
   }
@@ -117,12 +120,7 @@ class _ProductsGridState extends State<ProductsGrid> {
             mainAxisSpacing: 12,
           ),
           delegate: SliverChildBuilderDelegate((context, index) {
-            return ProductCard(
-              title: products[index]['title'],
-              price: '\$${products[index]['price']}',
-              rating: products[index]['rating'].toString(),
-              imageUrl: (products[index]['thumbnail']),
-            );
+            return ProductCard(product: products[index]);
           }, childCount: currentCount),
         ),
         SliverToBoxAdapter(

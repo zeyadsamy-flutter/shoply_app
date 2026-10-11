@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shoply/features/data/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String rating;
-  final String imageUrl;
+  final ProductModel product;
 
-  const ProductCard({
-    super.key,
-    required this.title,
-    required this.price,
-    required this.rating,
-    required this.imageUrl,
-  });
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +30,12 @@ class ProductCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      imageUrl,
+                      product.thumbnail,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image_not_supported, color: Colors.grey),
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
@@ -60,7 +54,10 @@ class ProductCard extends StatelessWidget {
                   bottom: 6,
                   left: 6,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -77,7 +74,7 @@ class ProductCard extends StatelessWidget {
                         const Icon(Icons.star, size: 12, color: Colors.amber),
                         const SizedBox(width: 3),
                         Text(
-                          rating,
+                          product.rating.toString(),
                           style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -92,7 +89,7 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            title,
+            product.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -107,7 +104,7 @@ class ProductCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                price,
+                "\$${product.price}",
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -120,11 +117,7 @@ class ProductCard extends StatelessWidget {
                   color: Color(0xFF00B074),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 16,
-                ),
+                child: const Icon(Icons.add, color: Colors.white, size: 16),
               ),
             ],
           ),
