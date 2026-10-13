@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/data/product_model.dart';
-import 'package:shoply/features/data/products_service.dart';
-import 'package:shoply/widgets/bottom_section.dart';
+import 'package:shoply/features/home/data/models/product_model.dart';
+import 'package:shoply/features/home/data/services/products_service.dart';
+import 'package:shoply/features/home/presentation/widgets/bottom_section.dart';
 
 import 'product_card.dart';
 

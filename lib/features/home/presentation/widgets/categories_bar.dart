@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/data/categories_service.dart';
+import 'package:shoply/features/home/data/services/categories_service.dart';
 
 class CategoriesBar extends StatefulWidget {
   final Function(String) onCategorySelected;

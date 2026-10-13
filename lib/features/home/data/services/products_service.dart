@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shoply/features/data/product_model.dart';
+import 'package:shoply/features/home/data/models/product_model.dart';
 
 class ProductsService {
   final Dio dio = Dio(

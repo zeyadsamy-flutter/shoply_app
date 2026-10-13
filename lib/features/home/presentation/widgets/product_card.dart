@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/data/product_model.dart';
+import 'package:shoply/features/home/data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
