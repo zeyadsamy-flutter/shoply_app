@@ -17,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
   final TextEditingController searchController = TextEditingController();
 
   String selectedCategory = 'All';
-  int productsCount = 194;
+  num productsCount = 194;
   int viewedCount = 8;
   String selectedOption = 'Recommended';
   String search = "";

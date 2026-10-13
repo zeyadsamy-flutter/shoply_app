@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoadMoreButton extends StatelessWidget {
   final int viewedCount;
-  final int totalCount;
+  final num totalCount;
   final VoidCallback onLoadMore;
 
   const LoadMoreButton({

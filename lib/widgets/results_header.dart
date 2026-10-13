@@ -4,7 +4,7 @@ import 'sort_dropdown.dart';
 
 class ResultsHeader extends StatelessWidget {
   final int viewedCount;
-  final int total;
+  final num total;
   final ValueChanged<String> onSelected;
   final String selectedOption;
   const ResultsHeader({
@@ -17,7 +17,7 @@ class ResultsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int count = viewedCount > total ? total : viewedCount;
+    final num count = viewedCount > total ? total : viewedCount;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

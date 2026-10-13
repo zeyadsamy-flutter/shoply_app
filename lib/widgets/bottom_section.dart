@@ -5,7 +5,7 @@ import 'products_progress_bar.dart';
 
 class BottomSection extends StatelessWidget {
   final int viewedCount;
-  final int totalCount;
+  final num totalCount;
   final VoidCallback onLoadMore;
 
   const BottomSection({
@@ -26,9 +26,7 @@ class BottomSection extends StatelessWidget {
           onLoadMore: onLoadMore,
         ),
         SizedBox(height: viewedCount >= totalCount ? 0 : 16),
-        ProductsProgressBar(
-          progress: viewedCount / totalCount,
-        ),
+        ProductsProgressBar(progress: viewedCount / totalCount),
         const SizedBox(height: 8),
       ],
     );

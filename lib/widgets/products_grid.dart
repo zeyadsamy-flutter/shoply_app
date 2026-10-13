@@ -8,7 +8,7 @@ import 'product_card.dart';
 class ProductsGrid extends StatefulWidget {
   final String selectedCategory;
   final Function(num) productsCount;
-  final int productsTotal;
+  final num productsTotal;
   final int viewedCount;
   final String selectedOption;
   final VoidCallback onLoadMore;
@@ -28,9 +28,8 @@ class ProductsGrid extends StatefulWidget {
 }
 
 class _ProductsGridState extends State<ProductsGrid> {
-
   List<ProductModel> products = [];
-  
+
   Future<void> fetchProducts() async {
     final data = await _productsAsBox.fetchProducts(
       search: widget.search,
