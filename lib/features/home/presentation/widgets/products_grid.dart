@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shoply/core/network/api_service.dart';
+import 'package:shoply/core/network/dio_client.dart';
 import 'package:shoply/features/home/data/models/product_model.dart';
-import 'package:shoply/features/home/data/services/products_service.dart';
+import 'package:shoply/features/home/data/repo/products_repo.dart';
 import 'package:shoply/features/home/presentation/widgets/bottom_section.dart';
 
 import 'product_card.dart';
@@ -31,7 +33,7 @@ class _ProductsGridState extends State<ProductsGrid> {
   List<ProductModel> products = [];
 
   Future<void> fetchProducts() async {
-    final data = await _productsAsBox.fetchProducts(
+    final data = await _productsRepo.fetchProducts(
       search: widget.search,
       selectedCategory: widget.selectedCategory,
       selectedOption: widget.selectedOption,
@@ -43,8 +45,7 @@ class _ProductsGridState extends State<ProductsGrid> {
     });
   }
 
-  final ProductsService _productsAsBox = ProductsService();
-
+  final ProductsRepo _productsRepo = ProductsRepo(ApiService(DioClient()));
   @override
   void initState() {
     super.initState();

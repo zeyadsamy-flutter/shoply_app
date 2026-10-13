@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/data/services/categories_service.dart';
+import 'package:shoply/core/network/api_service.dart';
+import 'package:shoply/core/network/dio_client.dart';
+import 'package:shoply/features/home/data/repo/products_repo.dart';
 
 class CategoriesBar extends StatefulWidget {
   final Function(String) onCategorySelected;
@@ -9,10 +11,10 @@ class CategoriesBar extends StatefulWidget {
 }
 
 class _CategoriesBarState extends State<CategoriesBar> {
-  final CategoriesService _categoriesList = CategoriesService();
+  final ProductsRepo _productsRepo = ProductsRepo(ApiService(DioClient()));
   List<String> categories = [];
   Future<void> getCategoryList() async {
-    final fetchedCategories = await _categoriesList.getCategoryList();
+    final fetchedCategories = await _productsRepo.getCategoryList();
     setState(() {
       categories = ["All", ...fetchedCategories];
     });
