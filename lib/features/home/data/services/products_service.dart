@@ -1,14 +1,8 @@
-import 'package:dio/dio.dart';
+import 'package:shoply/core/network/api_client.dart';
 import 'package:shoply/features/home/data/models/product_model.dart';
 
 class ProductsService {
-  final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: "https://dummyjson.com/",
-      headers: {'Content-Type': 'application/json'},
-    ),
-  );
-
+  final ApiClient _apiClient = ApiClient();
   Map<String, dynamic> _getSortParams({required String selectedOption}) {
     final Map<String, String> sortOption;
 
@@ -41,32 +35,31 @@ class ProductsService {
     required String selectedOption,
     required String selectedCategory,
   }) async {
-    final Response<dynamic> response;
-
+    final data;
     if (search.isNotEmpty) {
-      response = await dio.get(
-        'products/search',
+      data = await _apiClient.get(
+        endpoint: 'products/search',
         queryParameters: {
           ..._getSortParams(selectedOption: selectedOption),
           'q': search,
         },
       );
     } else if (selectedCategory != 'All') {
-      response = await dio.get(
-        "products/category/$selectedCategory",
+      data = await _apiClient.get(
+        endpoint: "products/category/$selectedCategory",
         queryParameters: _getSortParams(selectedOption: selectedOption),
       );
     } else {
-      response = await dio.get(
-        'products',
+      data = await _apiClient.get(
+        endpoint: 'products',
         queryParameters: _getSortParams(selectedOption: selectedOption),
       );
     }
 
-    List<ProductModel> products = (response.data['products'] as List)
+    List<ProductModel> products = (data['products'] as List)
         .map((item) => ProductModel.fromJson(item))
         .toList();
-    final num total = response.data['total'];
+    final num total = data['total'];
     return (products: products, total: total);
   }
 }
