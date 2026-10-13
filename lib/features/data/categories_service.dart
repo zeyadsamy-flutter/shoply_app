@@ -7,9 +7,9 @@ class CategoriesService {
       headers: {'Content-Type': 'application/json'},
     ),
   );
-
-  Future getCatergoryList() async {
-    final reponse = await dio.get("products/category-list");
-    return reponse;
+  Future<List<String>> getCategoryList() async {
+    final response = await dio.get("products/category-list");
+    final List<dynamic> data = response.data;
+    return data.map((item) => item.toString()).toList();
   }
 }

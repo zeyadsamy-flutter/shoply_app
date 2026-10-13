@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shoply/features/data/categories_service.dart';
 
 class CategoriesBar extends StatefulWidget {
   final Function(String) onCategorySelected;
@@ -9,29 +9,19 @@ class CategoriesBar extends StatefulWidget {
 }
 
 class _CategoriesBarState extends State<CategoriesBar> {
-  final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: "https://dummyjson.com/",
-      headers: {'Content-Type': 'application/json'},
-    ),
-  );
-
-  Future getCatergoryList() async {
-    final reponse = await dio.get("products/category-list");
+  final CategoriesService _categoriesList = CategoriesService();
+  List<String> categories = [];
+  Future<void> getCategoryList() async {
+    final fetchedCategories = await _categoriesList.getCategoryList();
     setState(() {
-      categories = ["All", ...reponse.data];
+      categories = ["All", ...fetchedCategories];
     });
-  }
-
-  List categories = [];
-  void assignCategory() {
-    getCatergoryList();
   }
 
   @override
   initState() {
     super.initState();
-    assignCategory();
+    getCategoryList();
   }
 
   int selectedIndex = 0;
