@@ -1,13 +1,13 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shoply/features/data/product_model.dart';
+import 'package:shoply/features/data/products_service.dart';
 import 'package:shoply/widgets/bottom_section.dart';
 
 import 'product_card.dart';
 
 class ProductsGrid extends StatefulWidget {
   final String selectedCategory;
-  final Function(int) productsCount;
+  final Function(num) productsCount;
   final int productsTotal;
   final int viewedCount;
   final String selectedOption;
@@ -28,65 +28,23 @@ class ProductsGrid extends StatefulWidget {
 }
 
 class _ProductsGridState extends State<ProductsGrid> {
-  final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: "https://dummyjson.com/",
-      headers: {'Content-Type': 'application/json'},
-    ),
-  );
 
   List<ProductModel> products = [];
-
-  Map<String, dynamic> _getSortParams() {
-    final Map<String, String> sortOption;
-
-    switch (widget.selectedOption) {
-      case 'Price: Low to High':
-        sortOption = {"sortBy": "price", "order": "asc"};
-        break;
-      case 'Price: High to Low':
-        sortOption = {"sortBy": "price", "order": "desc"};
-        break;
-      case 'Title: A-Z':
-        sortOption = {"sortBy": "title", "order": "asc"};
-        break;
-      case 'Recommended':
-      default:
-        sortOption = {"sortBy": "rating", "order": "desc"};
-        break;
-    }
-
-    return {
-      "limit": 0,
-      "select": "id,title,price,thumbnail,rating",
-      ...sortOption,
-    };
-  }
-
+  
   Future<void> fetchProducts() async {
-    final Response response;
-
-    if (widget.search.isNotEmpty) {
-      response = await dio.get(
-        'products/search',
-        queryParameters: {..._getSortParams(), 'q': widget.search},
-      );
-    } else if (widget.selectedCategory != 'All') {
-      response = await dio.get(
-        "products/category/${widget.selectedCategory}",
-        queryParameters: _getSortParams(),
-      );
-    } else {
-      response = await dio.get('products', queryParameters: _getSortParams());
-    }
+    final data = await _productsAsBox.fetchProducts(
+      search: widget.search,
+      selectedCategory: widget.selectedCategory,
+      selectedOption: widget.selectedOption,
+    );
 
     setState(() {
-      products = (response.data['products'] as List)
-          .map((item) => ProductModel.fromJson(item))
-          .toList();
-      widget.productsCount(response.data['total']);
+      products = data.products;
+      widget.productsCount(data.total);
     });
   }
+
+  final ProductsService _productsAsBox = ProductsService();
 
   @override
   void initState() {
