@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'custom_icon_button.dart';
+
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});
 
@@ -38,31 +40,60 @@ class CustomAppBar extends StatelessWidget {
         ),
         Row(
           children: [
-            _buildActionIcon(
-              icon: Icons.notifications_none_outlined,
-              onTap: () {},
+            Stack(
+              children: [
+                CustomIconButton(
+                  icon: Icons.notifications_none_outlined,
+                  onTap: () {},
+                ),
+                Positioned(
+                  right: 12,
+                  top: 15,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(width: 12),
-            _buildActionIcon(
-              icon: Icons.shopping_bag_outlined,
-              onTap: () {},
+            Stack(
+              children: [
+                CustomIconButton(
+                  icon: Icons.shopping_bag_outlined,
+                  onTap: () {},
+                ),
+                Positioned(
+                  right: 1,
+                  top: 1,
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF00B074),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '3',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ],
-    );
-  }
-
-  Widget _buildActionIcon({required IconData icon, required VoidCallback onTap}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        shape: BoxShape.circle,
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: Colors.black87),
-        onPressed: onTap,
-      ),
     );
   }
 }
