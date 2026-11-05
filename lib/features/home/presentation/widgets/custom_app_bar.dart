@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoply/features/home/controllers/product_scope.dart';
 
 import 'custom_icon_button.dart';
 
@@ -7,6 +8,7 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = ProductScope.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -77,10 +79,10 @@ class CustomAppBar extends StatelessWidget {
                       color: Color(0xFF00B074),
                       shape: BoxShape.circle,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        '3',
-                        style: TextStyle(
+                        controller.value.toString(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

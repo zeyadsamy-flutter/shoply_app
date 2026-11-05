@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/data/models/product_model.dart';
+import 'package:shoply/features/home/controllers/product_scope.dart';
+import '../../data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -8,6 +9,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = ProductScope.read(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -111,13 +113,18 @@ class ProductCard extends StatelessWidget {
                   color: Color(0xFF00B074),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF00B074),
-                  shape: BoxShape.circle,
+              IconButton(
+                onPressed: () {
+                  controller.increment();
+                },
+                style: IconButton.styleFrom(
+                  backgroundColor: const Color(0xFF00B074),
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(6),
+                  minimumSize: const Size(28, 28),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Icon(Icons.add, color: Colors.white, size: 16),
+                icon: const Icon(Icons.add, color: Colors.white, size: 16),
               ),
             ],
           ),
