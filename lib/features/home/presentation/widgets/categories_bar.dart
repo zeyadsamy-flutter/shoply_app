@@ -1,49 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/core/network/api_service.dart';
-import 'package:shoply/core/network/dio_client.dart';
-import 'package:shoply/features/home/data/repo/products_repo.dart';
+import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
 
-class CategoriesBar extends StatefulWidget {
-  final Function(String) onCategorySelected;
-  const CategoriesBar({super.key, required this.onCategorySelected});
-  @override
-  State<CategoriesBar> createState() => _CategoriesBarState();
-}
-
-class _CategoriesBarState extends State<CategoriesBar> {
-  final ProductsRepo _productsRepo = ProductsRepo(ApiService(DioClient()));
-  List<String> categories = [];
-  Future<void> getCategoryList() async {
-    final fetchedCategories = await _productsRepo.getCategoryList();
-    setState(() {
-      categories = ["All", ...fetchedCategories];
-    });
-  }
-
-  @override
-  initState() {
-    super.initState();
-    getCategoryList();
-  }
-
-  int selectedIndex = 0;
-
+class CategoriesBar extends StatelessWidget {
+  const CategoriesBar({super.key});
   @override
   Widget build(BuildContext context) {
+    final controller = ProductGridScope.of(context);
     return SizedBox(
       height: 38,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
+        itemCount: controller.categories.length,
         separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
-          final isSelected = selectedIndex == index;
+          final isSelected =
+              controller.selectedCategory == controller.categories[index];
           return GestureDetector(
             onTap: () {
-              setState(() {
-                selectedIndex = index;
-              });
-              widget.onCategorySelected(categories[index].toString());
+              controller.selectCategory(controller.categories[index]);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -56,7 +30,7 @@ class _CategoriesBarState extends State<CategoriesBar> {
               ),
               alignment: Alignment.center,
               child: Text(
-                categories[index].toString(),
+                controller.categories[index].toString(),
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.grey.shade700,
                   fontSize: 13,

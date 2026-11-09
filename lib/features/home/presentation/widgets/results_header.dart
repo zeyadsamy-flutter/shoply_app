@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
 
 import 'sort_dropdown.dart';
 
 class ResultsHeader extends StatelessWidget {
-  final int viewedCount;
-  final num total;
-  final ValueChanged<String> onSelected;
-  final String selectedOption;
-  const ResultsHeader({
-    super.key,
-    required this.total,
-    required this.viewedCount,
-    required this.selectedOption,
-    required this.onSelected,
-  });
+  const ResultsHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final num count = viewedCount > total ? total : viewedCount;
+    final controller = ProductGridScope.of(context);
+    final num count = controller.products.length < controller.viewedCount
+        ? controller.products.length
+        : controller.viewedCount;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -33,11 +27,11 @@ class ResultsHeader extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              TextSpan(text: ' of $total products'),
+              TextSpan(text: ' of ${controller.total} products'),
             ],
           ),
         ),
-        SortDropdown(selectedOption: selectedOption, onSelected: onSelected),
+        SortDropdown(),
       ],
     );
   }

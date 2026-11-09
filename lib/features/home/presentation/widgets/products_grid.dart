@@ -1,72 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/core/network/api_service.dart';
-import 'package:shoply/core/network/dio_client.dart';
-import 'package:shoply/features/home/data/models/product_model.dart';
-import 'package:shoply/features/home/data/repo/products_repo.dart';
+import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
 import 'package:shoply/features/home/presentation/widgets/bottom_section.dart';
 
 import 'product_card.dart';
 
-class ProductsGrid extends StatefulWidget {
-  final String selectedCategory;
-  final Function(num) productsCount;
-  final num productsTotal;
-  final int viewedCount;
-  final String selectedOption;
-  final VoidCallback onLoadMore;
-  final String search;
-  const ProductsGrid({
-    super.key,
-    required this.selectedCategory,
-    required this.productsCount,
-    required this.viewedCount,
-    required this.selectedOption,
-    required this.search,
-    required this.productsTotal,
-    required this.onLoadMore,
-  });
-  @override
-  State<ProductsGrid> createState() => _ProductsGridState();
-}
-
-class _ProductsGridState extends State<ProductsGrid> {
-  List<ProductModel> products = [];
-
-  Future<void> fetchProducts() async {
-    final data = await _productsRepo.fetchProducts(
-      search: widget.search,
-      selectedCategory: widget.selectedCategory,
-      selectedOption: widget.selectedOption,
-    );
-
-    setState(() {
-      products = data.products;
-      widget.productsCount(data.total);
-    });
-  }
-
-  final ProductsRepo _productsRepo = ProductsRepo(ApiService(DioClient()));
-  @override
-  void initState() {
-    super.initState();
-    fetchProducts();
-  }
-
-  @override
-  void didUpdateWidget(covariant ProductsGrid oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedCategory != widget.selectedCategory ||
-        oldWidget.selectedOption != widget.selectedOption ||
-        oldWidget.search != widget.search) {
-      fetchProducts();
-    }
-  }
-
+class ProductsGrid extends StatelessWidget {
+  const ProductsGrid({super.key, });
   @override
   Widget build(BuildContext context) {
-    final currentCount = products.length < widget.viewedCount
-        ? products.length
-        : widget.viewedCount;
+    final controller = ProductGridScope.of(context);
+    final currentCount = controller.products.length < controller.viewedCount
+        ? controller.products.length
+        : controller.viewedCount;
 
     return CustomScrollView(
       slivers: [
@@ -78,17 +23,13 @@ class _ProductsGridState extends State<ProductsGrid> {
             mainAxisSpacing: 12,
           ),
           delegate: SliverChildBuilderDelegate((context, index) {
-            return ProductCard(product: products[index]);
+            return ProductCard(product: controller.products[index]);
           }, childCount: currentCount),
         ),
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: BottomSection(
-              viewedCount: widget.viewedCount,
-              totalCount: widget.productsTotal,
-              onLoadMore: widget.onLoadMore,
-            ),
+            child: BottomSection(),
           ),
         ),
       ],

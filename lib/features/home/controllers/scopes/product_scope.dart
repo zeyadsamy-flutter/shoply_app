@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'product_selected_controller.dart';
+import '../controller/product_selected_controller.dart';
 
 class ProductScope extends InheritedNotifier<ProductSelectedController> {
   const ProductScope({

@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
 
 class LoadMoreButton extends StatelessWidget {
-  final int viewedCount;
-  final num totalCount;
-  final VoidCallback onLoadMore;
-
-  const LoadMoreButton({
-    super.key,
-    required this.viewedCount,
-    required this.totalCount,
-    required this.onLoadMore,
-  });
+  const LoadMoreButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (viewedCount >= totalCount) {
+    final controller = ProductGridScope.read(context);
+    if (controller.viewedCount >= controller.total) {
       return const SizedBox(height: 0);
     }
     return SizedBox(
       width: double.infinity,
       height: 48,
       child: OutlinedButton(
-        onPressed: onLoadMore,
+        onPressed: controller.updateViewedCount,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: Colors.grey.shade200),
           shape: RoundedRectangleBorder(
