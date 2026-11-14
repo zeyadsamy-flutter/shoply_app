@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:shoply/core/network/api_service.dart';
-import 'package:shoply/core/network/dio_client.dart';
 import 'package:shoply/features/home/cubit/product_grid_state.dart';
 import 'package:shoply/features/home/data/repo/products_repo.dart';
 
 class ProductGridCubit extends Cubit<ProductGridState> {
-  final ProductsRepo _productsRepo = ProductsRepo(ApiService(DioClient()));
-  ProductGridCubit() : super(ProductGridState());
+  final ProductsRepo _productsRepo ;
+  ProductGridCubit({required this._productsRepo}) : super(ProductGridState());
   void selectOption(String selected) {
     if (state.selectedOption == selected) return;
 

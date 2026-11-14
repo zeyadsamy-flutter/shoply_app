@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/core/network/api_service.dart';
+import 'package:shoply/core/network/dio_client.dart';
 import 'package:shoply/features/home/controllers/scopes/product_scope.dart';
 import 'package:shoply/features/home/controllers/controller/product_selected_controller.dart';
 import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
+import 'package:shoply/features/home/data/repo/products_repo.dart';
+import 'package:shoply/features/home/data/services/categories_service.dart';
+import 'package:shoply/features/home/data/services/products_service.dart';
 
 import '../widgets/categories_bar.dart';
 import '../widgets/custom_app_bar.dart';
@@ -23,8 +28,19 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    final ApiService apiService = ApiService(DioClient());
+    final ProductsService productsService = ProductsService(
+      apiService: apiService,
+    );
+    final CategoriesService categoriesService = CategoriesService(
+      apiService: apiService,
+    );
+    final ProductsRepo productsRepo = ProductsRepo(
+      productsService,
+      categoriesService,
+    );
     _controller = ProductSelectedController();
-    _gridController = ProductGridCubit();
+    _gridController = ProductGridCubit(productsRepo: productsRepo);
     _gridController.fetchProducts();
     _gridController.getCategoryList();
   }
