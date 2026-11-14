@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:shoply/features/home/data/models/product_model.dart';
 
-class ProductGridState {
+class ProductGridState extends Equatable {
   final String _selectedOption;
   final String _search;
   final String _defaultSelectedCategory;
@@ -46,4 +47,15 @@ class ProductGridState {
   String get selectedCategory => _defaultSelectedCategory;
   int get viewedCount => _viewedCount;
   num get total => _productsCount;
+
+  @override
+  List<Object?> get props => [
+    _selectedOption,
+    _search,
+    _defaultSelectedCategory,
+    _viewedCount,
+    _productsCount,
+    _products,
+    _categories,
+  ];
 }
