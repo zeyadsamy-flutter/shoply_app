@@ -18,9 +18,29 @@ class ProductGridState {
     this._products = const [],
     this._categories = const [],
   });
+  // copy with
+  ProductGridState copyWith({
+    String? selectedOption,
+    String? search,
+    String? selectedCategory,
+    int? viewedCount,
+    num? total,
+    List<ProductModel>? products,
+    List<String>? categories,
+  }) {
+    return ProductGridState(
+      selectedOption: selectedOption ?? _selectedOption,
+      search: search ?? _search,
+      defaultSelectedCategory: selectedCategory ?? _defaultSelectedCategory,
+      viewedCount: viewedCount ?? _viewedCount,
+      productsCount: total ?? _productsCount,
+      products: products ?? _products,
+      categories: categories ?? _categories,
+    );
+  }
 
-  List<ProductModel> get products => _products;
-  List<String> get categories => _categories;
+  List<ProductModel> get products => List.unmodifiable(_products);
+  List<String> get categories => List.unmodifiable(_categories);
   String get selectedOption => _selectedOption;
   String get search => _search;
   String get selectedCategory => _defaultSelectedCategory;

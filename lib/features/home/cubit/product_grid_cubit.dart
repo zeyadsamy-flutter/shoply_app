@@ -12,17 +12,7 @@ class ProductGridCubit extends Cubit<ProductGridState> {
   void selectOption(String selected) {
     if (state.selectedOption == selected) return;
 
-    emit(
-      ProductGridState(
-        selectedOption: selected,
-        search: "",
-        defaultSelectedCategory: state.selectedCategory,
-        viewedCount: 8,
-        productsCount: state.total,
-        products: state.products,
-        categories: state.categories,
-      ),
-    );
+    emit(state.copyWith(selectedOption: selected, search: "", viewedCount: 8));
     fetchProducts();
   }
 
@@ -32,31 +22,17 @@ class ProductGridCubit extends Cubit<ProductGridState> {
       selectedCategory: state.selectedCategory,
       selectedOption: state.selectedOption,
     );
-    emit(
-      ProductGridState(
-        selectedOption: state.selectedOption,
-        search: state.search,
-        defaultSelectedCategory: state.selectedCategory,
-        viewedCount: state.viewedCount,
-        productsCount: data.total,
-        products: data.products,
-        categories: state.categories,
-      ),
-    );
+    emit(state.copyWith(total: data.total, products: data.products));
   }
 
   Timer? _debounce;
 
   void inputSearch(String input) {
     emit(
-      ProductGridState(
+      state.copyWith(
         selectedOption: "Recommended",
         search: input,
-        defaultSelectedCategory: state.selectedCategory,
         viewedCount: 8,
-        productsCount: state.total,
-        products: state.products,
-        categories: state.categories,
       ),
     );
     _debounce?.cancel();
@@ -69,14 +45,11 @@ class ProductGridCubit extends Cubit<ProductGridState> {
     if (state.selectedCategory == category) return;
 
     emit(
-      ProductGridState(
+      state.copyWith(
         selectedOption: 'Recommended',
         search: '',
-        defaultSelectedCategory: category,
+        selectedCategory: category,
         viewedCount: 8,
-        productsCount: state.total,
-        products: state.products,
-        categories: state.categories,
       ),
     );
 
@@ -85,33 +58,13 @@ class ProductGridCubit extends Cubit<ProductGridState> {
 
   void updateViewedCount() {
     int newViewedCount = state.viewedCount + 8;
-    emit(
-      ProductGridState(
-        selectedOption: state.selectedOption,
-        search: state.search,
-        defaultSelectedCategory: state.selectedCategory,
-        viewedCount: newViewedCount,
-        productsCount: state.total,
-        products: state.products,
-        categories: state.categories,
-      ),
-    );
+    emit(state.copyWith(viewedCount: newViewedCount));
   }
 
   Future<void> getCategoryList() async {
     final fetchedCategories = await _productsRepo.getCategoryList();
     final List<String> categoriesWithAll = ["All", ...fetchedCategories];
-    emit(
-      ProductGridState(
-        selectedOption: state.selectedOption,
-        search: state.search,
-        defaultSelectedCategory: state.selectedCategory,
-        viewedCount: state.viewedCount,
-        productsCount: state.total,
-        products: state.products,
-        categories: categoriesWithAll,
-      ),
-    );
+    emit(state.copyWith(categories: categoriesWithAll));
   }
 
   @override
