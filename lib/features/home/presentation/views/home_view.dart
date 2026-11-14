@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/controller/product_grid_controller.dart';
-import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoply/features/home/controllers/scopes/product_scope.dart';
 import 'package:shoply/features/home/controllers/controller/product_selected_controller.dart';
+import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 
 import '../widgets/categories_bar.dart';
 import '../widgets/custom_app_bar.dart';
@@ -18,13 +18,13 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   late final ProductSelectedController _controller;
-  late final ProductGridController _gridController;
+  late final ProductGridCubit _gridController;
 
   @override
   void initState() {
     super.initState();
     _controller = ProductSelectedController();
-    _gridController = ProductGridController();
+    _gridController = ProductGridCubit();
     _gridController.fetchProducts();
     _gridController.getCategoryList();
   }
@@ -32,14 +32,13 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     _controller.dispose();
-    _gridController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ProductGridScope(
-      controller: _gridController,
+    return BlocProvider(
+      create: (context) => _gridController,
       child: ProductScope(
         controller: _controller,
         child: GestureDetector(

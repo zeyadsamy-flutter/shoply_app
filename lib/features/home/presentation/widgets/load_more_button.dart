@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 
 class LoadMoreButton extends StatelessWidget {
   const LoadMoreButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProductGridScope.read(context);
-    if (controller.viewedCount >= controller.total) {
+    final viewedCount = context.select(
+      (ProductGridCubit cubit) => cubit.state.viewedCount,
+    );
+    final total = context.select((ProductGridCubit cubit) => cubit.state.total);
+    final ProductGridCubit productGridCubit = context.read<ProductGridCubit>();
+    if (viewedCount >= total) {
       return const SizedBox(height: 0);
     }
     return SizedBox(
       width: double.infinity,
       height: 48,
       child: OutlinedButton(
-        onPressed: controller.updateViewedCount,
+        onPressed: productGridCubit.updateViewedCount,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: Colors.grey.shade200),
           shape: RoundedRectangleBorder(

@@ -1,11 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   const SearchField({super.key});
+
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    _searchController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controller = ProductGridScope.read(context);
+    final ProductGridCubit productGridCubit = context.read<ProductGridCubit>();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -13,9 +34,9 @@ class SearchField extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
       ),
       child: TextField(
-        controller: controller.searchController,
+        controller: _searchController,
         onChanged: (value) {
-          controller.inputSearch(value);
+          productGridCubit.inputSearch(value);
         },
         decoration: InputDecoration(
           hintText: 'Search products...',

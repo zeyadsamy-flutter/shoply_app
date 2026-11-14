@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 
 class CategoriesBar extends StatelessWidget {
   const CategoriesBar({super.key});
   @override
   Widget build(BuildContext context) {
-    final controller = ProductGridScope.of(context);
+    final categories = context.select(
+      (ProductGridCubit cubit) => cubit.state.categories,
+    );
+    final selectedCategory = context.select(
+      (ProductGridCubit cubit) => cubit.state.selectedCategory,
+    );
+    final ProductGridCubit productGridCubit = context.read<ProductGridCubit>();
     return SizedBox(
       height: 38,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: controller.categories.length,
+        itemCount: categories.length,
         separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final isSelected =
-              controller.selectedCategory == controller.categories[index];
+              selectedCategory ==
+              categories[index];
           return GestureDetector(
             onTap: () {
-              controller.selectCategory(controller.categories[index]);
+              productGridCubit.selectCategory(
+                categories[index],
+              );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -30,7 +40,7 @@ class CategoriesBar extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                controller.categories[index].toString(),
+                categories[index].toString(),
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.grey.shade700,
                   fontSize: 13,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 
 import 'sort_dropdown.dart';
 
@@ -8,10 +9,16 @@ class ResultsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProductGridScope.of(context);
-    final num count = controller.products.length < controller.viewedCount
-        ? controller.products.length
-        : controller.viewedCount;
+    final productsLength = context.select(
+      (ProductGridCubit cubit) => cubit.state.products.length,
+    );
+    final viewedCount = context.select(
+      (ProductGridCubit cubit) => cubit.state.viewedCount,
+    );
+    final total = context.select((ProductGridCubit cubit) => cubit.state.total);
+    final num count = productsLength < viewedCount
+        ? productsLength
+        : viewedCount;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -27,7 +34,7 @@ class ResultsHeader extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              TextSpan(text: ' of ${controller.total} products'),
+              TextSpan(text: ' of $total products'),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_grid_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 
 class SortDropdown extends StatelessWidget {
   const SortDropdown({super.key});
@@ -12,14 +13,17 @@ class SortDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProductGridScope.of(context);
+    final selectedOption = context.select(
+      (ProductGridCubit cubit) => cubit.state.selectedOption,
+    );
+    final ProductGridCubit productGridCubit = context.read<ProductGridCubit>();
     return Theme(
       data: Theme.of(context).copyWith(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
       child: PopupMenuButton<String>(
-        initialValue: controller.selectedOption,
+        initialValue: selectedOption,
         offset: const Offset(0, 36),
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -29,11 +33,11 @@ class SortDropdown extends StatelessWidget {
         color: Colors.white,
         padding: EdgeInsets.zero,
         onSelected: (String selectedOption) {
-          controller.selectOption(selectedOption);
+          productGridCubit.selectOption(selectedOption);
         },
         itemBuilder: (BuildContext context) {
           return sortOptions.map((String option) {
-            final isSelected = option == controller.selectedOption;
+            final isSelected = option == selectedOption;
             return PopupMenuItem<String>(
               value: option,
               height: 38,
@@ -74,7 +78,7 @@ class SortDropdown extends StatelessWidget {
               const Icon(Icons.swap_vert, size: 16, color: Color(0xFF00B074)),
               const SizedBox(width: 4),
               Text(
-                controller.selectedOption,
+                selectedOption,
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
