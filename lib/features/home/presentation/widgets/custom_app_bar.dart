@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_selected_cubit.dart';
 
 import 'custom_icon_button.dart';
 
@@ -79,11 +80,10 @@ class CustomAppBar extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Center(
-                      child: Builder(
-                        builder: (context) {
-                          final controller = ProductScope.of(context);
+                      child: BlocBuilder<ProductSelectedCubit, int>(
+                        builder: (context, state) {
                           return Text(
-                            controller.value.toString(),
+                            state.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -91,7 +91,6 @@ class CustomAppBar extends StatelessWidget {
                             ),
                           );
                         },
-                        
                       ),
                     ),
                   ),

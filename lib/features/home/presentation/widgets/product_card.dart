@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shoply/features/home/controllers/scopes/product_scope.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoply/features/home/cubit/product_selected_cubit.dart';
 import '../../data/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -9,7 +10,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProductScope.read(context);
+    final controller = context.read<ProductSelectedCubit>();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,

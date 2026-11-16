@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoply/core/network/api_service.dart';
 import 'package:shoply/core/network/dio_client.dart';
-import 'package:shoply/features/home/controllers/scopes/product_scope.dart';
-import 'package:shoply/features/home/controllers/controller/product_selected_controller.dart';
+import 'package:shoply/features/home/cubit/product_selected_cubit.dart';
 import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 import 'package:shoply/features/home/data/repo/products_repo.dart';
 import 'package:shoply/features/home/data/services/categories_service.dart';
@@ -22,7 +21,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  late final ProductSelectedController _controller;
+  late final ProductSelectedCubit _selectedController;
   late final ProductGridCubit _gridController;
 
   @override
@@ -39,48 +38,42 @@ class _HomeViewState extends State<HomeView> {
       productsService,
       categoriesService,
     );
-    _controller = ProductSelectedController();
+    _selectedController = ProductSelectedCubit();
     _gridController = ProductGridCubit(productsRepo: productsRepo);
     _gridController.fetchProducts();
     _gridController.getCategoryList();
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _gridController,
-      child: ProductScope(
-        controller: _controller,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    const CustomAppBar(),
-                    const SizedBox(height: 16),
-                    SearchField(),
-                    const SizedBox(height: 16),
-                    CategoriesBar(),
-                    const SizedBox(height: 16),
-                    ResultsHeader(),
-                    const SizedBox(height: 12),
-                    const Expanded(child: ProductsSection()),
-                  ],
-                ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => _gridController),
+        BlocProvider(create: (context) => _selectedController),
+      ],
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  const CustomAppBar(),
+                  const SizedBox(height: 16),
+                  SearchField(),
+                  const SizedBox(height: 16),
+                  CategoriesBar(),
+                  const SizedBox(height: 16),
+                  ResultsHeader(),
+                  const SizedBox(height: 12),
+                  const Expanded(child: ProductsSection()),
+                ],
               ),
             ),
           ),
