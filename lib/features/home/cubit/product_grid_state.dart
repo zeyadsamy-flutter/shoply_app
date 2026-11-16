@@ -1,7 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:shoply/core/error/api_error_model.dart';
 import 'package:shoply/features/home/data/models/product_model.dart';
 
+enum ProductStatus { initial, loading, success, failure }
+
 class ProductGridState extends Equatable {
+  final ProductStatus _status;
+  final ApiErrorModel? _error;
   final String _selectedOption;
   final String _search;
   final String _defaultSelectedCategory;
@@ -11,6 +16,8 @@ class ProductGridState extends Equatable {
   final List<String> _categories;
 
   const ProductGridState({
+    this._status = ProductStatus.initial, 
+    this._error,
     this._selectedOption = 'Recommended',
     this._search = "",
     this._defaultSelectedCategory = 'All',
@@ -22,6 +29,9 @@ class ProductGridState extends Equatable {
   // copy with
   ProductGridState copyWith({
     String? selectedOption,
+    bool clearError = false,
+    ProductStatus? status,
+    ApiErrorModel? error,
     String? search,
     String? selectedCategory,
     int? viewedCount,
@@ -30,6 +40,8 @@ class ProductGridState extends Equatable {
     List<String>? categories,
   }) {
     return ProductGridState(
+      status: status ?? _status,
+      error: clearError ? null : (error ?? _error),
       selectedOption: selectedOption ?? _selectedOption,
       search: search ?? _search,
       defaultSelectedCategory: selectedCategory ?? _defaultSelectedCategory,
@@ -47,9 +59,12 @@ class ProductGridState extends Equatable {
   String get selectedCategory => _defaultSelectedCategory;
   int get viewedCount => _viewedCount;
   num get total => _productsCount;
-
+  ProductStatus get status => _status;
+  ApiErrorModel? get error => _error;
   @override
   List<Object?> get props => [
+    _status,
+    _error,
     _selectedOption,
     _search,
     _defaultSelectedCategory,

@@ -8,10 +8,10 @@ import 'package:shoply/features/home/cubit/product_grid_cubit.dart';
 import 'package:shoply/features/home/data/repo/products_repo.dart';
 import 'package:shoply/features/home/data/services/categories_service.dart';
 import 'package:shoply/features/home/data/services/products_service.dart';
+import 'package:shoply/features/home/presentation/widgets/products_section.dart';
 
 import '../widgets/categories_bar.dart';
 import '../widgets/custom_app_bar.dart';
-import '../widgets/products_grid.dart';
 import '../widgets/results_header.dart';
 import '../widgets/search_field.dart';
 
@@ -78,7 +78,7 @@ class _HomeViewState extends State<HomeView> {
                     const SizedBox(height: 16),
                     ResultsHeader(),
                     const SizedBox(height: 12),
-                    Expanded(child: ProductsGrid()),
+                    const Expanded(child: ProductsSection()),
                   ],
                 ),
               ),

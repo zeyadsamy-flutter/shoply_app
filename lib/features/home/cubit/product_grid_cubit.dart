@@ -5,7 +5,7 @@ import 'package:shoply/features/home/cubit/product_grid_state.dart';
 import 'package:shoply/features/home/data/repo/products_repo.dart';
 
 class ProductGridCubit extends Cubit<ProductGridState> {
-  final ProductsRepo _productsRepo ;
+  final ProductsRepo _productsRepo;
   ProductGridCubit({required this._productsRepo}) : super(ProductGridState());
   void selectOption(String selected) {
     if (state.selectedOption == selected) return;
@@ -15,12 +15,28 @@ class ProductGridCubit extends Cubit<ProductGridState> {
   }
 
   Future<void> fetchProducts() async {
-    final data = await _productsRepo.fetchProducts(
+    emit(state.copyWith(status: ProductStatus.loading, clearError: true));
+
+    final result = await _productsRepo.fetchProducts(
       search: state.search,
       selectedCategory: state.selectedCategory,
       selectedOption: state.selectedOption,
     );
-    emit(state.copyWith(total: data.total, products: data.products));
+
+    result.when(
+      onSuccess: (data) {
+        emit(
+          state.copyWith(
+            status: ProductStatus.success,
+            total: data.total,
+            products: data.products,
+          ),
+        );
+      },
+      onError: (errorModel) {
+        emit(state.copyWith(status: ProductStatus.failure, error: errorModel));
+      },
+    );
   }
 
   Timer? _debounce;
@@ -60,9 +76,17 @@ class ProductGridCubit extends Cubit<ProductGridState> {
   }
 
   Future<void> getCategoryList() async {
-    final fetchedCategories = await _productsRepo.getCategoryList();
-    final List<String> categoriesWithAll = ["All", ...fetchedCategories];
-    emit(state.copyWith(categories: categoriesWithAll));
+    final result = await _productsRepo.getCategoryList();
+    result.when(
+      onSuccess: (fetchedCategories) {
+        final List<String> categoriesWithAll = ["All", ...fetchedCategories];
+        emit(state.copyWith(categories: categoriesWithAll));
+      },
+      onError: (errorModel) {
+        final List<String> categoriesWithAll = ["All"];
+        emit(state.copyWith(categories: categoriesWithAll));
+      },
+    );
   }
 
   @override
